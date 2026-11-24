@@ -17,6 +17,8 @@
 
 Sample outputs for all programs are available in `sample_outputs.txt`.
 
+A complete, all-in-one explanatory guide containing the full source code for every program along with line-by-line explanations, compilation guides, and conceptual analysis is available in [PARALLEL_PROGRAMMING_COMPLETE_GUIDE.md](file:///home/cherry/pp_lab_it/PARALLEL_PROGRAMMING_COMPLETE_GUIDE.md).
+
 ## How to compile and run
 
 At the bottom of each program file, the exact commands to compile and execute that program are also included.
