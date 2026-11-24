@@ -1,0 +1,244 @@
+================================================================
+Program 1: p1_array_add.cu
+$ nvcc p1_array_add.cu -o p1 && ./p1
+----------------------------------------------------------------
+0 + 0 = 0
+1 + 2 = 3
+2 + 4 = 6
+3 + 6 = 9
+4 + 8 = 12
+5 + 10 = 15
+6 + 12 = 18
+7 + 14 = 21
+8 + 16 = 24
+9 + 18 = 27
+
+================================================================
+Program 2: p2_matmul.c
+$ gcc -fopenmp p2_matmul.c -o p2 && ./p2
+----------------------------------------------------------------
+Threads = 1   Time = 0.349141 s   Speedup = 1.00
+Threads = 2   Time = 0.179182 s   Speedup = 1.95
+Threads = 4   Time = 0.092682 s   Speedup = 3.77
+Threads = 8   Time = 0.046766 s   Speedup = 7.47
+C[0][0] = 1000 (expected 1000)
+
+================================================================
+Program 3: p3_mergesort.c
+$ gcc -fopenmp p3_mergesort.c -o p3 && ./p3
+----------------------------------------------------------------
+Sequential time = 0.303634 s
+
+Threads = 1   Time = 0.304487 s   Speedup = 1.00
+Threads = 2   Time = 0.165270 s   Speedup = 1.84
+Threads = 4   Time = 0.136939 s   Speedup = 2.22
+Threads = 8   Time = 0.071637 s   Speedup = 4.24
+
+Array sorted correctly
+
+================================================================
+Program 4: p4_threadprivate.c
+$ gcc -fopenmp p4_threadprivate.c -o p4 && ./p4
+----------------------------------------------------------------
+Region 1 (without copyin): other threads still have x = 0
+  Thread 3: x = 0
+  Thread 1: x = 0
+  Thread 0: x = 10
+  Thread 2: x = 0
+
+Region 2 (with copyin): master's x is copied to all threads
+  Thread 1: x = 10
+  Thread 0: x = 10
+  Thread 3: x = 10
+  Thread 2: x = 10
+
+Region 3: each thread's copy keeps its value from region 2
+  Thread 0: x = 10
+  Thread 2: x = 12
+  Thread 1: x = 11
+  Thread 3: x = 13
+
+Master thread after all regions: x = 10
+
+================================================================
+Program 5: p5_schedule.c
+$ gcc -fopenmp p5_schedule.c -o p5 && ./p5
+----------------------------------------------------------------
+STATIC (equal blocks of iterations, fixed in advance):
+  Iteration  0 -> Thread 0  (work = 5000000)
+  Iteration  1 -> Thread 0  (work = 10000000)
+  Iteration  4 -> Thread 1  (work = 25000000)
+  Iteration  2 -> Thread 0  (work = 15000000)
+  Iteration  8 -> Thread 2  (work = 45000000)
+  Iteration  3 -> Thread 0  (work = 20000000)
+  Iteration  5 -> Thread 1  (work = 30000000)
+  Iteration 12 -> Thread 3  (work = 65000000)
+  Iteration  6 -> Thread 1  (work = 35000000)
+  Iteration  9 -> Thread 2  (work = 50000000)
+  Iteration  7 -> Thread 1  (work = 40000000)
+  Iteration 13 -> Thread 3  (work = 70000000)
+  Iteration 10 -> Thread 2  (work = 55000000)
+  Iteration 11 -> Thread 2  (work = 60000000)
+  Iteration 14 -> Thread 3  (work = 75000000)
+  Iteration 15 -> Thread 3  (work = 80000000)
+Time = 0.821918 s
+
+DYNAMIC (free thread takes the next iteration):
+  Iteration  0 -> Thread 3  (work = 5000000)
+  Iteration  1 -> Thread 0  (work = 10000000)
+  Iteration  2 -> Thread 2  (work = 15000000)
+  Iteration  3 -> Thread 1  (work = 20000000)
+  Iteration  4 -> Thread 3  (work = 25000000)
+  Iteration  5 -> Thread 0  (work = 30000000)
+  Iteration  6 -> Thread 2  (work = 35000000)
+  Iteration  7 -> Thread 1  (work = 40000000)
+  Iteration  8 -> Thread 3  (work = 45000000)
+  Iteration  9 -> Thread 0  (work = 50000000)
+  Iteration 10 -> Thread 2  (work = 55000000)
+  Iteration 11 -> Thread 1  (work = 60000000)
+  Iteration 12 -> Thread 3  (work = 65000000)
+  Iteration 13 -> Thread 0  (work = 70000000)
+  Iteration 14 -> Thread 2  (work = 75000000)
+  Iteration 15 -> Thread 1  (work = 80000000)
+Time = 0.574418 s
+
+GUIDED (big chunks first, then smaller chunks):
+  Iteration  0 -> Thread 3  (work = 5000000)
+  Iteration  1 -> Thread 3  (work = 10000000)
+  Iteration  4 -> Thread 0  (work = 25000000)
+  Iteration  2 -> Thread 3  (work = 15000000)
+  Iteration  7 -> Thread 1  (work = 40000000)
+  Iteration  3 -> Thread 3  (work = 20000000)
+  Iteration 10 -> Thread 2  (work = 55000000)
+  Iteration  5 -> Thread 0  (work = 30000000)
+  Iteration  8 -> Thread 1  (work = 45000000)
+  Iteration  6 -> Thread 0  (work = 35000000)
+  Iteration 12 -> Thread 3  (work = 65000000)
+  Iteration 11 -> Thread 2  (work = 60000000)
+  Iteration  9 -> Thread 1  (work = 50000000)
+  Iteration 13 -> Thread 0  (work = 70000000)
+  Iteration 14 -> Thread 3  (work = 75000000)
+  Iteration 15 -> Thread 2  (work = 80000000)
+Time = 0.562561 s
+
+================================================================
+Program 6: p6_primes.c
+$ gcc -fopenmp p6_primes.c -o p6 && ./p6
+----------------------------------------------------------------
+Sequential: primes up to 2000000 = 148933, time = 0.257054 s
+
+Threads   Time(s)    Speedup   Efficiency
+   1    0.254630    1.01      1.01
+   2    0.132397    1.94      0.97
+   4    0.067926    3.78      0.95
+   8    0.034402    7.47      0.93
+
+Primes found (parallel) = 148933
+
+================================================================
+Program 7: p7_mpi_sum.c
+$ mpicc p7_mpi_sum.c -o p7 && mpirun -np 4 ./p7
+----------------------------------------------------------------
+Process 1: partial sum = 250000
+Process 3: partial sum = 250000
+Process 0: partial sum = 250000
+Process 2: partial sum = 250000
+Total sum = 1000000 (expected 1000000)
+
+================================================================
+Program 8: p8_mpi_comm.c
+$ mpicc p8_mpi_comm.c -o p8 && mpirun -np 4 ./p8
+----------------------------------------------------------------
+Process 0 sent: Hello from P0
+Process 0 after Bcast: 10 20 30 40 50
+Process 1 received: Hello from P0
+Process 1 after Bcast: 10 20 30 40 50
+Process 2 after Bcast: 10 20 30 40 50
+Process 3 after Bcast: 10 20 30 40 50
+
+================================================================
+Program 9: p9_cuda_props.cu
+$ nvcc p9_cuda_props.cu -o p9 && ./p9
+----------------------------------------------------------------
+GPU Name             : NVIDIA GeForce RTX 3050 Laptop GPU
+Compute Capability   : 8.6
+Global Memory        : 3790 MB
+Multiprocessors (SM) : 16
+Warp Size            : 32
+Max Threads/Block    : 1024
+Max Block Dimensions : 1024 x 1024 x 64
+Max Grid Dimensions  : 2147483647 x 65535 x 65535
+
+<<<1 block, 4 threads>>>
+  Block 0, Thread 0, Global ID 0
+  Block 0, Thread 1, Global ID 1
+  Block 0, Thread 2, Global ID 2
+  Block 0, Thread 3, Global ID 3
+
+<<<2 blocks, 4 threads>>>
+  Block 0, Thread 0, Global ID 0
+  Block 0, Thread 1, Global ID 1
+  Block 0, Thread 2, Global ID 2
+  Block 0, Thread 3, Global ID 3
+  Block 1, Thread 0, Global ID 4
+  Block 1, Thread 1, Global ID 5
+  Block 1, Thread 2, Global ID 6
+  Block 1, Thread 3, Global ID 7
+
+<<<4 blocks, 2 threads>>>
+  Block 0, Thread 0, Global ID 0
+  Block 0, Thread 1, Global ID 1
+  Block 1, Thread 0, Global ID 2
+  Block 1, Thread 1, Global ID 3
+  Block 2, Thread 0, Global ID 4
+  Block 2, Thread 1, Global ID 5
+  Block 3, Thread 0, Global ID 6
+  Block 3, Thread 1, Global ID 7
+
+================================================================
+Program 10: p10_vec_add_time.cu
+$ nvcc p10_vec_add_time.cu -o p10 && ./p10
+----------------------------------------------------------------
+Results match
+CPU time = 0.031129 s
+GPU time = 0.000880 s
+Speedup  = 35.37
+
+================================================================
+Program 11: p11_linreg.py
+$ python3 p11_linreg.py
+----------------------------------------------------------------
+Epoch    0  Loss = 50.1284  dL/dw = -46.9461  dL/db = -12.9720
+Epoch  100  Loss = 0.0007  dL/dw = -0.0057  dL/db = 0.0207
+Epoch  200  Loss = 0.0003  dL/dw = -0.0041  dL/db = 0.0148
+Epoch  300  Loss = 0.0002  dL/dw = -0.0029  dL/db = 0.0105
+Epoch  400  Loss = 0.0001  dL/dw = -0.0021  dL/db = 0.0075
+Epoch  500  Loss = 0.0000  dL/dw = -0.0015  dL/db = 0.0053
+Epoch  600  Loss = 0.0000  dL/dw = -0.0011  dL/db = 0.0038
+Epoch  700  Loss = 0.0000  dL/dw = -0.0008  dL/db = 0.0027
+Epoch  800  Loss = 0.0000  dL/dw = -0.0005  dL/db = 0.0019
+Epoch  900  Loss = 0.0000  dL/dw = -0.0004  dL/db = 0.0014
+
+Learned: w = 1.999, b = 1.003  (true: w = 2, b = 1)
+
+================================================================
+Program 12: p12_ffnn.py
+$ python3 p12_ffnn.py
+----------------------------------------------------------------
+Sequential(
+  (0): Linear(in_features=10, out_features=16, bias=True)
+  (1): ReLU()
+  (2): Linear(in_features=16, out_features=1, bias=True)
+)
+Epoch   0  Loss = 0.7986
+Epoch  10  Loss = 0.6657
+Epoch  20  Loss = 0.6245
+Epoch  30  Loss = 0.5862
+Epoch  40  Loss = 0.5489
+Epoch  50  Loss = 0.5133
+Epoch  60  Loss = 0.4796
+Epoch  70  Loss = 0.4472
+Epoch  80  Loss = 0.4162
+Epoch  90  Loss = 0.3875
+Final Loss = 0.3639
+

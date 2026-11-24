@@ -1,0 +1,27 @@
+Parallel Programming Laboratory (23AIL57)
+
+List of Programs:
+
+1. Write a CUDA program to perform addition of Two Arrays.
+
+2. Implement parallel matrix multiplication using OpenMP and measure execution time with varying thread counts.
+
+3. Develop a parallel merge sort algorithm using OpenMP and analyze speedup compared to sequential execution.
+
+4. Demonstrate how to use threadprivate and copyin directives in OpenMP to make variables local to each thread and observe the behavior of thread-private storage.
+
+5. Develop an OpenMP program using various scheduling strategies (static, dynamic, guided) to observe their effect on loop performance and load balancing.
+
+6. Implement a parallel prime number generation algorithm using OpenMP. Compare the performance of sequential and parallel executions by varying the number of threads and analyze execution time, speedup, and efficiency.
+
+7. Implement a parallel summation of a large array using MPI. Use MPI_Scatter to distribute segments, compute partial sums, and use MPI_Reduce to combine results.
+
+8. Create an MPI program to demonstrate both point-to-point (MPI_Send, MPI_Recv) and collective broadcast (MPI_Bcast) communication. Use a simple data structure (e.g., arrays or strings) for demonstration.
+
+9. CUDA Program overview demonstrating kernel launch functions by varying the number of threads per block and blocks per grid and to print the GPU properties.
+
+10. Write a CUDA program for vector addition and compare execution time with CPU-based implementation.
+
+11. Develop a Linear Regression using PyTorch to demonstrate gradient computation and basic optimization.
+
+12. Develop a basic feedforward neural network on random data using PyTorch.
