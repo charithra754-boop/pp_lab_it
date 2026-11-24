@@ -29,3 +29,6 @@ int main() {
     for (int i = 0; i < N; i++) work(i);
     printf("Time = %f s\n", omp_get_wtime() - t);
 }
+
+// gcc -fopenmp p5_schedule.c -o p5
+// ./p5

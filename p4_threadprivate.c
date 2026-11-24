@@ -27,3 +27,6 @@ int main() {
     printf("\nMaster thread after all regions: x = %d\n", x);
     return 0;
 }
+
+// gcc -fopenmp p4_threadprivate.c -o p4
+// ./p4

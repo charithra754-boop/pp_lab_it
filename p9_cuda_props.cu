@@ -27,3 +27,6 @@ int main() {
     hello<<<4, 2>>>();
     cudaDeviceSynchronize();
 }
+
+// nvcc p9_cuda_props.cu -o p9
+// ./p9

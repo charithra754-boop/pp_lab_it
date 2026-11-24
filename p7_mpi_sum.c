@@ -22,5 +22,7 @@ int main(int argc, char *argv[]) {
     if (rank == 0) printf("Total sum = %d (expected %d)\n", total, N);
 
     MPI_Finalize();
-    return 0;
 }
+
+// mpicc p7_mpi_sum.c -o p7
+// mpirun -np 4 ./p7

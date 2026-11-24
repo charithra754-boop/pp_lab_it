@@ -21,5 +21,7 @@ int main(int argc, char *argv[]) {
     printf("Process %d after Bcast: %d %d %d %d %d\n", rank, arr[0], arr[1], arr[2], arr[3], arr[4]);
 
     MPI_Finalize();
-    return 0;
 }
+
+// mpicc p8_mpi_comm.c -o p8
+// mpirun -np 4 ./p8

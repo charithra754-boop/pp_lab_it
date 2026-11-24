@@ -47,3 +47,6 @@ int main() {
     printf("\nArray sorted correctly\n");
     return 0;
 }
+
+// gcc -fopenmp p3_mergesort.c -o p3
+// ./p3

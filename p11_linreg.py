@@ -17,3 +17,5 @@ for epoch in range(1000):
         print(f"Epoch {epoch:4d}  Loss = {loss.item():.4f}  dL/dw = {model.weight.grad.item():.4f}  dL/db = {model.bias.grad.item():.4f}")
 
 print(f"\nLearned: w = {model.weight.item():.3f}, b = {model.bias.item():.3f}  (true: w = 2, b = 1)")
+
+# python3 p11_linreg.py

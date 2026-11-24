@@ -26,3 +26,6 @@ int main() {
     }
     return 0;
 }
+
+// gcc -fopenmp p6_primes.c -o p6
+// ./p6

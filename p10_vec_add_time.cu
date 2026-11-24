@@ -34,3 +34,6 @@ int main() {
     cudaFree(da); cudaFree(db); cudaFree(dc);
     free(a); free(b); free(c);
 }
+
+// nvcc p10_vec_add_time.cu -o p10
+// ./p10

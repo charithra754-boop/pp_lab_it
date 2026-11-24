@@ -22,3 +22,5 @@ for epoch in range(100):
         print(f"Epoch {epoch:3d}  Loss = {loss.item():.4f}")
 
 print(f"Final Loss = {loss.item():.4f}")
+
+# python3 p12_ffnn.py

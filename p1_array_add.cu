@@ -24,3 +24,6 @@ int main() {
     cudaFree(db);
     cudaFree(dc);
 }
+
+// nvcc p1_array_add.cu -o p1
+// ./p1

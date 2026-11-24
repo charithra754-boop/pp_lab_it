@@ -29,3 +29,6 @@ int main() {
     printf("C[0][0] = %.0f (expected %d)\n", C[0][0], 2 * N);
     return 0;
 }
+
+// gcc -fopenmp p2_matmul.c -o p2
+// ./p2
