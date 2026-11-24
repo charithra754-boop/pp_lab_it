@@ -1,68 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
 #define N 10000000
 
 __global__ void add(float *a, float *b, float *c) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
-    if (i < N) {
-        c[i] = a[i] + b[i];
-    }
+    if (i < N) c[i] = a[i] + b[i];
 }
 
 int main() {
-    int size = N * sizeof(float);
+    int sz = N * sizeof(float);
+    float *a = (float*)malloc(sz), *b = (float*)malloc(sz), *c = (float*)malloc(sz), *da, *db, *dc;
 
-    float *a = (float*)malloc(size);
-    float *b = (float*)malloc(size);
-    float *c = (float*)malloc(size);
-    float *g = (float*)malloc(size);
-    
-    float *d_a, *d_b, *d_c;
-
-    for (int i = 0; i < N; i++) {
-        a[i] = i;
-        b[i] = i * 2;
-    }
+    for (int i = 0; i < N; i++) { a[i] = i; b[i] = i * 2; }
 
     clock_t start = clock();
-    for (int i = 0; i < N; i++) {
-        c[i] = a[i] + b[i];
-    }
+    for (int i = 0; i < N; i++) c[i] = a[i] + b[i];
     double cpu = (double)(clock() - start) / CLOCKS_PER_SEC;
 
-    cudaMalloc((void**)&d_a, size);
-    cudaMalloc((void**)&d_b, size);
-    cudaMalloc((void**)&d_c, size);
-
-    cudaMemcpy(d_a, a, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_b, b, size, cudaMemcpyHostToDevice);
-
-    int threads = 256;
-    int blocks = N / threads + 1;
+    cudaMalloc((void**)&da, sz);
+    cudaMalloc((void**)&db, sz);
+    cudaMalloc((void**)&dc, sz);
+    cudaMemcpy(da, a, sz, cudaMemcpyHostToDevice);
+    cudaMemcpy(db, b, sz, cudaMemcpyHostToDevice);
 
     start = clock();
-    add<<<blocks, threads>>>(d_a, d_b, d_c);
+    add<<<(N + 255) / 256, 256>>>(da, db, dc);
     cudaDeviceSynchronize();
     double gpu = (double)(clock() - start) / CLOCKS_PER_SEC;
 
-    cudaMemcpy(g, d_c, size, cudaMemcpyDeviceToHost);
+    printf("CPU time = %f s\nGPU time = %f s\nSpeedup  = %.2f\n", cpu, gpu, cpu / gpu);
 
-    printf("Results:\n");
-    printf("CPU time = %f s\n", cpu);
-    printf("GPU time = %f s\n", gpu);
-    printf("Speedup  = %.2f\n", cpu / gpu);
-
-    cudaFree(d_a);
-    cudaFree(d_b);
-    cudaFree(d_c);
-    free(a);
-    free(b);
-    free(c);
-    free(g);
-    return 0;
+    cudaFree(da); cudaFree(db); cudaFree(dc);
+    free(a); free(b); free(c);
 }
-
-// nvcc p10_vec_add_time.cu -o p10
-// ./p10

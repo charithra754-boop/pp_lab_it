@@ -26,9 +26,4 @@ int main() {
     printf("\n<<<4 blocks, 2 threads>>>\n");
     hello<<<4, 2>>>();
     cudaDeviceSynchronize();
-
-    return 0;
 }
-
-// nvcc p9_cuda_props.cu -o p9
-// ./p9

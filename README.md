@@ -19,8 +19,6 @@ Sample outputs for all programs are available in `sample_outputs.txt`.
 
 ## How to compile and run
 
-At the bottom of each program file, the exact commands to compile and execute that program are also included.
-
 ### OpenMP (Programs 2–6)
 ```sh
 gcc -fopenmp p2_matmul.c -o p2
